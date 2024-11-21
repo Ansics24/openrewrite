@@ -1,7 +1,9 @@
 package de.schulte.recipes;
 
+import org.openrewrite.ExecutionContext;
 import org.openrewrite.NlsRewrite;
 import org.openrewrite.Recipe;
+import org.openrewrite.TreeVisitor;
 
 public class MyFirstImperativeRecipe extends Recipe {
     @Override
@@ -14,5 +16,8 @@ public class MyFirstImperativeRecipe extends Recipe {
         return "The first imperative recipe as a showcase for the OpenRewrite course";
     }
 
-
+    @Override
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
+        return new MyfirstVisitor();
+    }
 }
