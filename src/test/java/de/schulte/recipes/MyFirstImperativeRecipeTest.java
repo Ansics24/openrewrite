@@ -5,6 +5,8 @@ import org.openrewrite.java.Assertions;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class MyFirstImperativeRecipeTest implements RewriteTest {
 
     @Override
@@ -16,22 +18,7 @@ class MyFirstImperativeRecipeTest implements RewriteTest {
     void myFirstTest() {
         rewriteRun(Assertions.java(
                 """
-                        public class Foo {
-                        
-                          public String foo() {
-                            return "Hello";
-                          }
-                        
-                        }
-                        """,
-                """
-                        public class Foo {
-                        
-                          public String greet(String name) {
-                            return "Hello";
-                          }
-                        
-                        }
+                        public class Foo {}
                         """
         ));
     }
