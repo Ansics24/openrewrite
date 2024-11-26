@@ -18,7 +18,22 @@ class MyFirstImperativeRecipeTest implements RewriteTest {
     void myFirstTest() {
         rewriteRun(Assertions.java(
                 """
-                        public class Foo {}
+                        public class Foo {
+                        
+                          public String foo() {
+                            return "Hello";
+                          }
+                        
+                        }
+                        """,
+                """
+                        public class Foo {
+                        
+                          public final String greet(String name) {
+                            return "Hello %s".formatted(name);
+                          }
+                        
+                        }
                         """
         ));
     }
