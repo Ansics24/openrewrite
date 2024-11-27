@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.java.Assertions;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
+import org.openrewrite.test.TypeValidation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +12,8 @@ class MyFirstImperativeRecipeTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new MyFirstImperativeRecipe());
+        spec.recipe(new MyFirstImperativeRecipe())
+            .typeValidationOptions(TypeValidation.builder().identifiers(false).build());
     }
 
     @Test
