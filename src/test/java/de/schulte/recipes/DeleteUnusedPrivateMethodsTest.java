@@ -5,51 +5,47 @@ import org.openrewrite.java.Assertions;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-class DeleteUnusedPrivateMethodsTest implements RewriteTest{
+class DeleteUnusedPrivateMethodsTest implements RewriteTest {
 
-        @Override
-        public void defaults(RecipeSpec spec) {
-            spec.recipe(new DeleteUnusedPrivateMethods());
-        }
+    @Override
+    public void defaults(RecipeSpec spec) {
+        spec.recipe(new DeleteUnusedPrivateMethods());
+    }
 
-        @Test
-        void test() {
-            rewriteRun(Assertions.java(
-                    """
-                            public class Math {
-                            
-                              public int inc(int a) {
-                                return this.sum(a, 1);
-                              }
-                            
-                              public int sum(int a, int b) {
-                                return a + b;
-                              }
-                             
-                              private boolean isNegative(int number) {
-                                return number < 0;
-                              }
-                            
-                            }
-                            """,
-                    """
-                            public class Foo {
-                            
-                              public class Math {
-                            
-                              public int inc(int a) {
-                                return this.sum(a, 1);
-                              }
-                            
-                              public int sum(int a, int b) {
-                                return a + b;
-                              }
-                            
-                            }
-                            
-                            }
-                            """
-            ));
-        }
+    @Test
+    void test() {
+        rewriteRun(Assertions.java(
+                """
+                        public class Math {
+                        
+                          public int inc(int a) {
+                            return this.sum(a, 1);
+                          }
+                        
+                          private int sum(int a, int b) {
+                            return a + b;
+                          }
+                        
+                          private boolean isNegative(int number) {
+                            return number < 0;
+                          }
+                        
+                        }
+                        """,
+                """
+                       public class Math {
+                       
+                         public int inc(int a) {
+                           return this.sum(a, 1);
+                         }
+                       
+                         private int sum(int a, int b) {
+                           return a + b;
+                         }
+                       
+                       }
+                       """
+        ));
+    }
 
 }
