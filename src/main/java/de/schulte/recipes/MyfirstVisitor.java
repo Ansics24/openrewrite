@@ -17,9 +17,15 @@ public class MyfirstVisitor extends JavaVisitor<ExecutionContext> {
 
     public static final String MESSAGE_NAME_UNPERSONAL_GREETING = "unpersonalGreeting";
 
+    private final String greetingMethodName;
+
     private JavaTemplate addParameterTemplate = JavaTemplate.builder("String name").build();
 
     private JavaTemplate personalGreetingTemplate = JavaTemplate.builder("\"Hello %s\".formatted(name)").build();
+
+    public MyfirstVisitor(String greetingMethodName) {
+        this.greetingMethodName = greetingMethodName == null ? "greet" : greetingMethodName;
+    }
 
     @Override
     public J visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext executionContext) {
@@ -33,8 +39,10 @@ public class MyfirstVisitor extends JavaVisitor<ExecutionContext> {
             modifiers.add(new J.Modifier(UUID.randomUUID(), Space.SINGLE_SPACE, Markers.EMPTY, "final",
                     J.Modifier.Type.Final, Collections.emptyList()));
 
-            return newMethodDeclaration.withName(method.getName().withSimpleName("greet")).withModifiers(modifiers)
-                                       .withMethodType(newMethodDeclaration.getMethodType().withName("greet"));
+            return newMethodDeclaration.withName(method.getName().withSimpleName(greetingMethodName))
+                                       .withModifiers(modifiers)
+                                       .withMethodType(newMethodDeclaration.getMethodType()
+                                                                           .withName(greetingMethodName));
         }
         return methodDeclaration;
     }
@@ -45,12 +53,14 @@ public class MyfirstVisitor extends JavaVisitor<ExecutionContext> {
 
     @Override
     public J visitLiteral(J.Literal literal, ExecutionContext executionContext) {
-        if (literal.getValue() instanceof String || literal.getValue().toString().equals("Hello")) {
+        if (literal.getValue() instanceof String && literal.getValue().toString().equals("Hello")) {
             final var methodCursor = getCursor().dropParentUntil(node -> node instanceof J.MethodDeclaration);
-            final J.MethodDeclaration method = methodCursor.getValue();
-            if (!method.getName().getSimpleName().equals("greet")) {
-                methodCursor.putMessage(MESSAGE_NAME_UNPERSONAL_GREETING, true);
-                return personalGreetingTemplate.apply(getCursor(), literal.getCoordinates().replace());
+            if (methodCursor != null) {
+                final J.MethodDeclaration method = methodCursor.getValue();
+                if (!method.getName().getSimpleName().equals(greetingMethodName)) {
+                    methodCursor.putMessage(MESSAGE_NAME_UNPERSONAL_GREETING, true);
+                    return personalGreetingTemplate.apply(getCursor(), literal.getCoordinates().replace());
+                }
             }
         }
         return super.visitLiteral(literal, executionContext);
