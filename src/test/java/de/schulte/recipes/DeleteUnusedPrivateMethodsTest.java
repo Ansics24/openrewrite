@@ -22,10 +22,10 @@ class DeleteUnusedPrivateMethodsTest implements RewriteTest{
                                 return this.sum(a, 1);
                               }
                             
-                              public int sum(int a, int b) {
+                              private int sum(int a, int b) {
                                 return a + b;
                               }
-                             
+                            
                               private boolean isNegative(int number) {
                                 return number < 0;
                               }
@@ -33,19 +33,15 @@ class DeleteUnusedPrivateMethodsTest implements RewriteTest{
                             }
                             """,
                     """
-                            public class Foo {
-                            
-                              public class Math {
+                            public class Math {
                             
                               public int inc(int a) {
                                 return this.sum(a, 1);
                               }
                             
-                              public int sum(int a, int b) {
+                              private int sum(int a, int b) {
                                 return a + b;
                               }
-                            
-                            }
                             
                             }
                             """
