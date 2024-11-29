@@ -12,7 +12,7 @@ class MyFirstImperativeRecipeTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new MyFirstImperativeRecipe())
+        spec.recipe(new MyFirstImperativeRecipe("bye"))
             .typeValidationOptions(TypeValidation.builder().identifiers(false).build());
     }
 

@@ -4,7 +4,7 @@ import org.openrewrite.*;
 
 public class MyFirstImperativeRecipe extends Recipe {
 
-    @Option(displayName = "GreetingMethodName", description = "The name of the method greeting personally", required = false)
+    @Option(displayName = "GreetingMethodName", description = "The name of the method greeting personally")
     private String greetingMethodName;
 
     public MyFirstImperativeRecipe() {
@@ -28,5 +28,14 @@ public class MyFirstImperativeRecipe extends Recipe {
     @Override
     public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new MyfirstVisitor(greetingMethodName);
+    }
+
+    @Override
+    public Validated<Object> validate() {
+        final var validate = super.validate();
+        if ("bye".equals(greetingMethodName)) {
+            return Validated.invalid("greetingMethodName", greetingMethodName, "%s is no greeting, sorry".formatted(greetingMethodName));
+        }
+        return validate;
     }
 }
